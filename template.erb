@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="UTF-8" />
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+	<title>Fahrrad fahren!</title>
+
+	<style type="text/css">
+
+	* {
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 14px;
+		font-weight: 400;
+	}
+
+	.wrap {
+		max-width: 500px;
+		margin: auto;
+
+		padding: 20px;
+	}
+
+	h1 {
+		font-weight: 600;
+		font-size: 24px;
+	}
+
+	p {
+		margin: 15px 0;
+		line-height: 155%;
+	}
+
+	p.api {
+		font-size: 14px;
+	}
+
+	.tweet {
+		text-align: center;
+		margin: 20px 0;
+	}
+
+	.footer {
+		font-size: 12px;
+		margin: 25px 0;
+
+		text-align: center;
+	}
+
+	a {
+		color: inherit;
+text-decoration: none;
+	}
+
+
+	.footer a {
+		text-decoration: underline;
+	}
+
+
+	.activities {
+		list-style-type: none;
+		margin: 15px 0;
+	}
+
+	.activities li {
+		text-align: center;
+		margin: 10px 0;
+		padding: 10px;
+
+		background: #A8DA8C;
+	}
+
+	.activities li .date {
+		display: block;
+		font-size: 12px;
+	}
+
+	.activities li strong {
+		display: block;
+		margin-top: 5px;
+		font-size: 16px;
+	}
+
+	.wide {
+		width: 100%;
+		background: rgba(0, 0, 0, .04);
+
+		margin: 15px 0;
+
+		height: 100px;
+	}
+
+	.meter {
+		display: block;
+		background: #A8DA8C;
+
+		height: 100%;
+	}
+
+	h2 {
+		position: relative;
+		font-weight: 400;
+		font-size: 26px;
+		text-align: center;
+
+		margin-top: -70px;
+	}
+
+	</style>
+</head>
+
+<body>
+
+<div class="wide">
+	<div class="meter" style="width: <%= @km_percent %>%">&nbsp;</div>
+	<h2>Ich muss noch <%= @km_left %> km fahren!</h2>
+</div>
+
+
+<div class="wrap">
+
+<h1>Was ist hier los?</h1>
+
+<p class="intro">
+
+Am 8. Juni 2013 um etwa 16 Uhr beging ich einen schweren Fehler. Ich kündigte auf Twitter an, eine Runde Fahrrad zu fahren, wenn der Tweet genug Favs bekommt. Als wäre das nicht schon schlimm genug, fügte ich hinzu noch hinzu, dass ich für jeden weitern Fav einen Kilometer mehr fahre.
+
+</p>
+
+<div class="tweet">
+
+<blockquote class="twitter-tweet"><p>Wenn dieser Tweet drei Favs bekommt, werde ich eine Runde (~3km) Fahrrad fahren.Für jeden weiteren Fav, füge ich einen Kilometer hinzu!</p>&mdash; Philipp Waldhauer (@knuspermagier) <a href="https://twitter.com/knuspermagier/status/343370212336340993">June 8, 2013</a></blockquote>
+<script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</div>
+
+
+<p class="intro">
+
+Ich rechnete insgesamt mit eventuell 5-6 Favs. Mittlerweile sind es etwas mehr. Weil ich mein Wort immer versuche zu halten, muss ich mich der Sache nun wohl annehmen und dokumentiere auf dieser Seite meinen aktuellen Status.
+
+</p>
+
+<h3>Die letzten Fahrten</h3>
+
+<ul class="activities">
+	<% for @trip in @trips %>
+	   <li><a href="http://runkeeper.com/user/pwaldhauer/activity/<%= @trip.uri %>"><span class="date"><%= @trip.date.strftime('%Y-%m-%d') %></span> <strong><%= (@trip.km/10).round/100.0 %> km</strong></a></li>
+	 <% end %>
+</ul>
+
+<p class="footer">
+	Fit werden mit <a href="http://knuspermagier.de">knuspermagier.de</a>.
+</p>
+
+</div>
+
+</body>
+

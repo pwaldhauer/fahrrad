@@ -1,14 +1,15 @@
 require 'rubygems'
 require 'data_mapper'
 
-DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_TEAL_URL'] || "sqlite://test.db")
-
+#DataMapper::Logger.new($stdout, :debug)
+DataMapper.setup(:default, "sqlite:///data.db")
 
 # Thats a bit messy, but hey.
 class Tweet
 	include DataMapper::Resource
 
-	property :id, String
+	property :id, Serial
+    property :tweet_id, String
 	property :favs, Integer
 	property :total_km, Float
 	property :last_update, DateTime
@@ -16,9 +17,11 @@ class Tweet
 end
 
 class Trip
+    include DataMapper::Resource
 
 	property :id, Serial
 	property :date, DateTime
+    property :duration, Integer
 	property :uri, String
 	property :km, Float
 

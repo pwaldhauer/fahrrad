@@ -1,31 +1,32 @@
 require 'rubygems'
-
-#require 'sinatra'
+require 'erb'
 
 require './models.rb'
 
 require 'twitter'
 require 'runkeeper'
 
-date_start = Date.parse(ENV['DATE_START']);
+require 'dotenv'
+Dotenv.load
+
+@date_start = Date.parse(ENV['DATE_START']);
 
 def update_runkeeper
 	user = Runkeeper.new(ENV['RUNKEEPER_TOKEN'])
-	puts user.name
 
 	activities = user.fitness_activities;
 
 	activities['items'].each do |activity|
 		# skip things older than 8. juni
 		date = Date.parse(activity['start_time']);
-		if date < date_start do
-			next
-		end
+		next if (date < @date_start)
 
-		obj = Trip.first_or_create(:uri => activity['uri']);
+		uri = activity['uri'][/\d+$/]
+
+		obj = Trip.first_or_create(:uri => uri);
 		obj.duration = activity['duration'];
 		obj.km = activity['total_distance'];
-		obj.date = activity['start_time']
+		obj.date = date
 		obj.save
 	end
 end
@@ -38,9 +39,9 @@ def update_twitter
 	  config.oauth_token_secret = ENV['TWITTER_TOKEN_SECRET']
 	end
 
-	tweet = Twitter.Tweets.status(ENV['TWITTER_TWEET'])
+	tweet = Twitter.status(ENV['TWITTER_TWEET'])
 
-	obj = Tweet.first_or_create(:id => ENV['TWITTER_TWEET'])
+	obj = Tweet.first_or_create(:tweet_id => ENV['TWITTER_TWEET'])
 	obj.favs = tweet.favorite_count
 	obj.last_update = Time.now
 
@@ -54,5 +55,25 @@ def update_twitter
 	obj.save
 end
 
+def render_template
+	obj = Tweet.first_or_create(:tweet_id => ENV['TWITTER_TWEET'])
+
+	@km_left = (obj.favs - obj.total_km).round
+	@km_percent = (obj.total_km/obj.favs) * 100
+
+	@trips = Trip.all(:order => [ :date.desc ])
+
+	renderer = ERB.new(File.read('template.erb'));
+	output = renderer.result();
+
+	File.open('index.html', 'w') do |f|
+	      f.write(output)
+	end
+end
+
 update_runkeeper
+
 update_twitter
+
+render_template
+
