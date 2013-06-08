@@ -33,10 +33,10 @@ end
 
 def update_twitter
 	Twitter.configure do |config|
-	  config.consumer_key = ENV['TWITTER_CONSUMER']
-	  config.consumer_secret = ENV['TWITTER_SECRET']
-	  config.oauth_token = ENV['TWITTER_TOKEN']
-	  config.oauth_token_secret = ENV['TWITTER_TOKEN_SECRET']
+		config.consumer_key = ENV['TWITTER_CONSUMER']
+		config.consumer_secret = ENV['TWITTER_SECRET']
+		config.oauth_token = ENV['TWITTER_TOKEN']
+		config.oauth_token_secret = ENV['TWITTER_TOKEN_SECRET']
 	end
 
 	tweet = Twitter.status(ENV['TWITTER_TWEET'])
